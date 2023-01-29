@@ -1,56 +1,43 @@
 
 ############################################################deb1-rootca###########################################################
 
-
-sudo apt install tree ca-certificates
+sudo apt-get install tree ca-certificates wget
 
 mkdir ca
 
 cd ca/
-
 mkdir -p certs crl newcerts private subca/csr subca/certs/
 
-#cd ..
+cd ..
 
 #tree ca/
 #ca/
-├── certs
-├── crl
-├── newcerts
-├── private
-└── subca
-    ├── certs
-    └── csr
-	
-#cd ca/
+#├── certs
+#├── crl
+#├── newcerts
+#├── private
+#└── subca
+#    ├── certs
+#    └── csr
 
-sudo chmod 700 private/
+cd ca/
 
-sudo touch index.txt
+chmod 700 private/
 
-sudo touch index.txt.attr
+#wget rootca.cnf (get it from server)
 
-echo 1000 > serial
-echo 1000 > crlnumber
-
-
-
-
-sudo wget rootca.cnf (get it from server)
-
-#nano rootca.cnf
+nano rootca.cnf
 #change directory from /root/ca to /home/shuhari/ca
 #dir               = /home/shuhari/ca
 
-sudo openssl genrsa -aes256 -out private/ca.key.pem 4096
-
+openssl genrsa -aes256 -out private/ca.key.pem 4096
 #give passphrase: 12345
 
-sudo chmod 400 private/ca.key.pem
+chmod 400 private/ca.key.pem
 
-sudo openssl req -config rootca.cnf -key private/ca.key.pem -new -x509 -days 7300 -sha256 -extensions v3_ca -out certs/ca.cert.pem
+openssl req -config rootca.cnf -key private/ca.key.pem -new -x509 -days 7300 -sha256 -extensions v3_ca -out certs/ca.cert.pem
 
-#enter passphrase: 123
+#enter passphrase: 12345
 #Country Name (2 letter code) [GB]:IN
 #State or Province Name [England]:MH
 #Locality Name []:Pune
@@ -59,4 +46,4 @@ sudo openssl req -config rootca.cnf -key private/ca.key.pem -new -x509 -days 730
 #Common Name []:Shuhari Root CA
 #Email Address []:shuhari@local
 
-sudo chmod 444 certs/ca.cert.pem
+chmod 444 certs/ca.cert.pem
